@@ -48,13 +48,13 @@ public class Server {
             	response +=  MainDirectory.getAllEmployees();
             	response += "End of response\n";
             }
-            sharedResponse = "";
+            sharedResponse = "x";
             System.out.println(response);
             // write out the response
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
-            os.close();
+            //os.close();
         }
     }
 
@@ -63,13 +63,11 @@ public class Server {
 
             //  shared data that is used with other handlers
             sharedResponse = "";
-
             // set up a stream to read the body of the request
             InputStream inputStr = transmission.getRequestBody();
-     
             // set up a stream to write out the body of the response
             OutputStream outputStream = transmission.getResponseBody();
-
+    
             // string to hold the result of reading in the request
             StringBuilder sb = new StringBuilder();
             String postResponse = "notWorking";
@@ -79,18 +77,16 @@ public class Server {
                 sb=sb.append((char)nextChar);
                 nextChar=inputStr.read();
             }
+            System.out.println("Read");
             String x = sb.toString();
             String[] R = x.split(" ");
             if(R[0].equals("ADD")){
-            	/*StringBuilder employeeToAdd = new StringBuilder(); 
-            	while (nextChar > -1) {
-                     employeeToAdd=employeeToAdd.append((char)nextChar);
-                     nextChar=inputStr.read();
-                 }*/
-            	postResponse = "ROGER JSON RECEIVED";
+            	System.out.println(R[1]);
             	MainDirectory.add(R[1]);//should be JSON employee
-            	
+            	//sb.setLength(3);
+            	postResponse = "ROGER JSON RECEIVED";
             }
+            //	
             /*
             while(count <= 5){
             	sb=sb.append((char)nextChar);
@@ -120,9 +116,8 @@ public class Server {
             transmission.sendResponseHeaders(300, postResponse.length());
 
             // write it and return it
-            outputStream.write(postResponse.getBytes());
-
-            outputStream.close();
+            outputStream.write(postResponse.getBytes());          
+            //outputStream.close();
         }
     }
 
