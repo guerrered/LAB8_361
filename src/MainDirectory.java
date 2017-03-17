@@ -13,7 +13,9 @@ public class MainDirectory {
 	static Gson g = new Gson();
 	public MainDirectory()
 	{
-		
+		mainList.add(new Employee("E","e","e","e","e","e"));
+		mainList.add(new Employee("F","f","f","f","f","f"));
+		mainList.add(new Employee("A","a","a","a","a","a"));
 	}
     
 	
