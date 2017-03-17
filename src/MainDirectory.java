@@ -18,10 +18,6 @@ public class MainDirectory {
     
 	
 	public static void add(String in){
-		/*List<Employee> ep  = (g.fromJson(in, new TypeToken<Collection<Employee>> (){}.getType()));
-		for(Employee pp:ep){
-			mainList.add(pp);
-		}*/
 		Employee emp = g.fromJson(in, Employee.class);
 		mainList.add(emp);
 		//mainList.add(ep);

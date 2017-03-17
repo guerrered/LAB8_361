@@ -18,7 +18,7 @@ public class Employee {
 	
 	public String toString(){
 		String str="";
-		str = str+"LastName: "+lastName+", First Name: "+firstName+ ", CellPhone: "+ Phone + ", Department: " + Department + ", Gender: " + Gender + ", Title: " + Title;
+		str = str  + lastName + " " + firstName + " "  + Title  + " " + Department + " " + Phone +" " + Gender; 
 		return str;
 	}
 	

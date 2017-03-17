@@ -48,7 +48,7 @@ public class Server {
             	response +=  MainDirectory.getAllEmployees();
             	response += "End of response\n";
             }
-            sharedResponse = "x";
+            sharedResponse = "";
             System.out.println(response);
             // write out the response
             t.sendResponseHeaders(200, response.length());
@@ -77,26 +77,15 @@ public class Server {
                 sb=sb.append((char)nextChar);
                 nextChar=inputStr.read();
             }
-            System.out.println("Read");
             String x = sb.toString();
             String[] R = x.split(" ");
             if(R[0].equals("ADD")){
-            	System.out.println(R[1]);
             	MainDirectory.add(R[1]);//should be JSON employee
-            	//sb.setLength(3);
             	postResponse = "ROGER JSON RECEIVED";
+            	sb.setLength(3);//just shows add
             }
-            //	
-            /*
-            while(count <= 5){
-            	sb=sb.append((char)nextChar);
-            	nextChar = inputStr.read();
-            	count++;
-            	//if(sb.toString().equals("PRINT") || sb.toString().equals("CLEAR")){break;}
-            }*/
             else if(R[0].equals("PRINT")){
             	postResponse = "Printing";
-            	MainDirectory.print();
             }
             else if(R[0].equals("CLEAR")){
             	MainDirectory.clear();
