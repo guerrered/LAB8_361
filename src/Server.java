@@ -82,7 +82,6 @@ public class Server {
             if(R[0].equals("ADD")){
             	MainDirectory.add(R[1]);//should be JSON employee
             	postResponse = "ROGER JSON RECEIVED";
-            	sb.setLength(3);//just shows add
             }
             else if(R[0].equals("PRINT")){
             	postResponse = "Printing";
