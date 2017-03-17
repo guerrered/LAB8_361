@@ -54,7 +54,7 @@ public class Server {
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
-            //os.close();
+            os.close();
         }
     }
 
@@ -94,8 +94,9 @@ public class Server {
             	count++;
             	//if(sb.toString().equals("PRINT") || sb.toString().equals("CLEAR")){break;}
             }*/
-            if(R[0].equals("PRINT")){
+            else if(R[0].equals("PRINT")){
             	postResponse = "Printing";
+            	MainDirectory.print();
             }
             else if(R[0].equals("CLEAR")){
             	MainDirectory.clear();
