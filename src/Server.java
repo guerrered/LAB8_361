@@ -1,4 +1,8 @@
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,12 +30,16 @@ public class Server {
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
 
         // create a context to get the request to display the results
-        server.createContext("/displayresults", new DisplayHandler());
+        server.createContext("/displayresults", new StaticFileServer("Lab9.html"));
 
         // create a context to get the request for the POST
         server.createContext("/sendresults",new PostHandler());
+    
+        //
+        server.createContext("/styles.css", new StaticFileServer("styles.css"));
+        
         server.setExecutor(null); // creates a default executor
-
+        
         // get it going
         System.out.println("Starting Server...");
         server.start();
@@ -40,6 +48,12 @@ public class Server {
 
     static class DisplayHandler implements HttpHandler {
         public void handle(HttpExchange t) throws IOException {
+        	String response = HTMLtoString();
+        	t.sendResponseHeaders(200, response.length());
+            OutputStream os = t.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        	/*
             String response = "Begin of response\n";
 			Gson g = new Gson();
 			// set up the header
@@ -54,10 +68,49 @@ public class Server {
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
-            os.close();
+            os.close();*/
         }
     }
-
+    
+    /*
+     * class that replaces the DisplayHandler in favor of a "Static"FileServer
+     * which will print out the desired files even though they may be changed
+     * later on
+     */
+    static class StaticFileServer implements HttpHandler{
+    	String fileName;
+    	
+    	public StaticFileServer(String fileName){
+    		this.fileName = fileName;
+    	}
+    	
+    	public void handle(HttpExchange exchange)throws IOException{
+    		//String fileID = exchange.getRequestURI().getPath();
+    		File file =  new File(fileName);
+    		if(!file.exists()){
+    			String response = "Error 404 File not found.";
+    			exchange.sendResponseHeaders(404,  response.length());
+    			OutputStream output = exchange.getResponseBody();
+    			output.write(response.getBytes());
+    			output.flush();
+    			output.close();
+    		}
+    		else{
+    			exchange.sendResponseHeaders(200,0);
+    			OutputStream output = exchange.getResponseBody();
+    			FileInputStream fs = new FileInputStream(file);
+    			final byte[] buffer = new byte[0x10000];
+    			int count = 0;
+    			while((count = fs.read(buffer)) >= 0){
+    				output.write(buffer, 0,  count);
+    			}
+    			output.flush();
+    			output.close();
+    			fs.close();
+    		}
+    	}
+    }
+    
     static class PostHandler implements HttpHandler {
         public void handle(HttpExchange transmission) throws IOException {
 
@@ -108,6 +161,23 @@ public class Server {
             outputStream.write(postResponse.getBytes());          
             //outputStream.close();
         }
+    }
+    
+    
+    /*
+     * Possibly unneeded as this was fix for DisplayHandler which we altered
+     */
+    public static String HTMLtoString(){
+    	String ret = "";
+    	try(BufferedReader buff = new BufferedReader(new FileReader("Lab9.html"))){
+			String currentLine;
+			while((currentLine = buff.readLine()) != null){
+				ret += currentLine;
+			}
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+    	return ret;
     }
 
 }
