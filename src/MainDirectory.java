@@ -1,7 +1,13 @@
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Collection;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -87,5 +93,80 @@ public class MainDirectory {
 			
 		}
 	};
+	
+	public void tableBuilder(){
+		File inputFile = new File("Lab9.html");
+		File tempFile = new File("myTempFile.txt");
+		
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
+
+		String curLine ="temp";
+		try {
+			reader = new BufferedReader(new FileReader(inputFile));
+			writer = new BufferedWriter(new FileWriter(tempFile));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			//write the start of the file
+			while((curLine = reader.readLine()) !=null){
+				//skip the table
+				if(!curLine.contains("<table")){
+					writer.write(curLine);
+				}
+				else{
+					//writes <table style="width:100%">
+					writer.write(curLine +"\n");
+					//write the table
+					writer.write(newTable());
+					
+					//write the rest of the file
+					while((curLine = reader.readLine())!=null){
+						if(curLine.contains("</table>")){
+							do{
+								writer.write(curLine);
+							}while((curLine = reader.readLine())!=null);
+						}
+					}
+				}
+				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		//change name of file
+		
+	}
+	
+	public String newTable(){
+		/*
+	<tr>
+    <th>Firstname</th>
+    <th>Lastname</th> 
+    <th>Department</th>
+    <th>Title</th>
+    <th>Phone Number</th>
+  	</tr>
+		 */
+		
+		String nt ="\t<tr>";
+		for(int i=0; i<mainList.size(); i++){
+			Employee e = mainList.get(i);
+			
+			nt+=("\n\t\t<th>" + e.firstName + "</th>"
+			+"\n\t\t<th>"+ e.lastName + "</th>" 
+			+"\n\t\t<th>"+ e.Department + "</th>" 
+			+"\n\t\t<th>"+ e.Title + "</th>" 
+			+"\n\t\t<th>"+ e.Phone+ "</th>");
+			
+		}
+		nt+="\t</tr>\n";
+		return nt;
+	}
 
 }
