@@ -143,7 +143,7 @@ public class MainDirectory {
 		
 	}
 	
-	public String newTable(){
+	public static String newTable(){
 		/*
 	<tr>
     <th>Firstname</th>
@@ -153,19 +153,18 @@ public class MainDirectory {
     <th>Phone Number</th>
   	</tr>
 		 */
+		String nt ="";
 		
-		String nt ="\t<tr>";
 		for(int i=0; i<mainList.size(); i++){
 			Employee e = mainList.get(i);
-			
-			nt+=("\n\t\t<th>" + e.firstName + "</th>"
-			+"\n\t\t<th>"+ e.lastName + "</th>" 
-			+"\n\t\t<th>"+ e.Department + "</th>" 
-			+"\n\t\t<th>"+ e.Title + "</th>" 
-			+"\n\t\t<th>"+ e.Phone+ "</th>");
-			
+			nt +="<tr>";
+			nt+=("<td>" + e.firstName + "</td>"
+			+"<td>"+ e.lastName + "</td>" 
+			+"<td>"+ e.Department + "</td>" 
+			+"<td>"+ e.Title + "</td>" 
+			+"<td>"+ e.Phone+ "</td>" + "<td>" + e.Gender +"</td>");
+			nt +="</tr>";
 		}
-		nt+="\t</tr>\n";
 		return nt;
 	}
 

@@ -30,7 +30,7 @@ public class Server {
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
 
         // create a context to get the request to display the results
-        server.createContext("/displayresults", new StaticFileServer("Lab9.html"));
+        server.createContext("/displayresults", new DisplayHandler());
 
         // create a context to get the request for the POST
         server.createContext("/sendresults",new PostHandler());
@@ -53,22 +53,6 @@ public class Server {
             OutputStream os = t.getResponseBody();
             os.write(response.getBytes());
             os.close();
-        	/*
-            String response = "Begin of response\n";
-			Gson g = new Gson();
-			// set up the header
-            System.out.println(response);
-            if(sharedResponse.equals("PRINT")){
-            	response +=  MainDirectory.getAllEmployees();
-            	response += "End of response\n";
-            }
-            sharedResponse = "";
-            System.out.println(response);
-            // write out the response
-            t.sendResponseHeaders(200, response.length());
-            OutputStream os = t.getResponseBody();
-            os.write(response.getBytes());
-            os.close();*/
         }
     }
     
@@ -168,15 +152,9 @@ public class Server {
      * Possibly unneeded as this was fix for DisplayHandler which we altered
      */
     public static String HTMLtoString(){
-    	String ret = "";
-    	try(BufferedReader buff = new BufferedReader(new FileReader("Lab9.html"))){
-			String currentLine;
-			while((currentLine = buff.readLine()) != null){
-				ret += currentLine;
-			}
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+    	String ret = "<html><head><title>Company Directory</title><link rel = \"stylesheet\" type= \"text/css\" href = \"styles.css\"></head><body><h1 title =\"Hidden(1) Bit\">Company Directory</h1><table style =\"width:100%>\"<tr><th>FirstName</th><th>LastName</th><th>Department</th><th>Title</th><th>Phone Number</th><th>Gender</th></tr>";
+    	ret += MainDirectory.newTable();
+    	ret+= "</table></body></html>";
     	return ret;
     }
 
