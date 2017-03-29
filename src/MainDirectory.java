@@ -26,6 +26,7 @@ public class MainDirectory {
 	public static void add(String in){
 		Employee emp = g.fromJson(in, Employee.class);
 		mainList.add(emp);
+		mainList = sortArray();
 		//mainList.add(ep);
 	}
     
@@ -93,6 +94,25 @@ public class MainDirectory {
 			
 		}
 	};
+	@SuppressWarnings("unchecked")
+	public static List<Employee> sortArray(){
+		List<Employee>sorted= new ArrayList<>();
+		for(int i =0; i<mainList.size(); i++){
+			sorted.add(mainList.get(i));
+		}
+		sorted.sort(a);
+		return sorted;
+	}
+	public static Comparator<Employee> a = new Comparator<Employee>(){
+		
+
+		@Override
+		public int compare(Employee o1, Employee o2) {
+			// TODO Auto-generated method stub
+			return o1.lastName.compareTo(o2.lastName);
+		}
+	};
+	
 	
 	public void tableBuilder(){
 		File inputFile = new File("Lab9.html");
